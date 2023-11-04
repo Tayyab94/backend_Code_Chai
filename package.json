@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "a Backend at chai or code - youtube channel",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
@@ -13,5 +15,8 @@
     "code"
   ],
   "author": "Tayyab Bhatti",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
