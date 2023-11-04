@@ -1,0 +1,17 @@
+{
+  "name": "chai_youtube",
+  "version": "1.0.0",
+  "description": "a Backend at chai or code - youtube channel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "backend",
+    "chai_with",
+    "code"
+  ],
+  "author": "Tayyab Bhatti",
+  "license": "ISC"
+}
