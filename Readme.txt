@@ -15,3 +15,11 @@ npm install mongoose-aggregate-paginate-v2
 npm i bcrypt
 
  npm install jsonwebtoken
+
+
+ // file upload
+npm i multer
+
+// file location
+
+mnp i cloudinary
