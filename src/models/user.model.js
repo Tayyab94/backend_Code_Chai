@@ -23,7 +23,7 @@ const userSchema = new Schema({
         lowercase: true,
         trim: true,
     },
-    fullname: {
+    fullName: {
         type: String,
         required: true,
         trim: true,
@@ -62,7 +62,9 @@ userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
         return next();
     }
-    this.password = bcrypet.hash(this.password, 10)
+
+    this.password = await bcrypet.hash(this.password, 10)
+    next();
 })
 
 userSchema.methods.isPasswordCorrect = async function (password) {
