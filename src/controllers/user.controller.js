@@ -9,8 +9,11 @@ const GenerateAccessAndRefreshTokens = async (userId) => {
     try {
 
         const user = await User.findById(userId);
-        const accessToken = user.generateAccessToken();
-        const refreshToken = user.generateRefreshToken();
+
+        const accessToken = await user.generateAccessToken();
+
+
+        const refreshToken = await user.generateRefreshToken();
 
         user.refreshtoken = refreshToken;
         await user.save({ validateBeforeSave: false });
@@ -34,12 +37,13 @@ const registerUser = asyncHandler(async (req, res) => {
     // return res
 
     const { email, username, fullName, password } = req.body;
+    console.log(req.body)
 
     if ([fullName, email, username, password].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All Fields are required");
     }
 
-    const existUser = User.findOne({
+    const existUser = await User.findOne({
         $or: [
             { username }, { email }
         ]
@@ -53,20 +57,20 @@ const registerUser = asyncHandler(async (req, res) => {
     const avatarLocalPath = req.files?.avatar[0]?.path;
     const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "Avatar image is required")
-    }
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(400, "Avatar image is required")
+    // }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     const coverImamge = await uploadOnCloudinary(coverImageLocalPath);
 
-    if (!avatar) {
-        throw new ApiError(400, "Avatar file is required")
-    }
+    // if (!avatar) {
+    //     throw new ApiError(400, "Avatar file is required")
+    // }
 
     const user = await User.create({
         fullName,
-        avatar: avatar.url,
+        avatar: avatar?.url || "",
         coverImage: coverImamge?.url || "",
         email,
         password,
@@ -96,7 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { email, username, password } = req.body;
 
-    if (!username || !email) {
+    if (!username && !email) {
         throw new ApiError(400, "UserName or Password is Required")
     }
 
@@ -112,6 +116,7 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!isPasswordValid) {
         throw new ApiError(401, "Invalid User credentials")
     }
+
 
     const { accessToken, refreshToken } = await GenerateAccessAndRefreshTokens(user._id);
 
@@ -130,15 +135,16 @@ const loginUser = asyncHandler(async (req, res) => {
 
 
 const logoutUser = asyncHandler(async (req, res) => {
-    await User.findByIdAndUpdate(req.user?._id, {
+
+    const updatedUser = await User.findByIdAndUpdate(req.user?._id, {
         $set: {
-            refreshtoken: undefined
+            refreshtoken: null
         }
     }, {
         new: true
     });
 
-
+    console.log(updatedUser)
     const options = {
         httpOnly: true,
         secure: true

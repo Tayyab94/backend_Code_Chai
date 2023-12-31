@@ -31,7 +31,7 @@ const userSchema = new Schema({
     },
     avatar: {
         type: String,
-        required: true,
+        // required: true,
     },
     coverimage: {
         type: String,
@@ -72,7 +72,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 }
 
 userSchema.methods.generateAccessToken = async function () {
-    jwt.sign({
+    return jwt.sign({
         _id: this._id,
         email: this.email,
         username: this.username,
@@ -86,7 +86,7 @@ userSchema.methods.generateAccessToken = async function () {
 }
 
 userSchema.methods.generateRefreshToken = async function () {
-    jwt.sign({
+    return jwt.sign({
         _id: this._id,
     },
         process.env.REFRESH_TOKEN_SECRET,
